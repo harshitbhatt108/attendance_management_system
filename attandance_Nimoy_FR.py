@@ -9,14 +9,14 @@ import pandas as pd
 import datetime
 import time
 
-#####Window of the system
+#####Initial window of
 window = tk.Tk()
 window.title("Attendance Management System")
 
 window.geometry('1280x720')
 window.configure(background='snow')
 
-####GUI for manually fill attendance
+####GUI for manual attendance
 
 def manually_fill():
     global sb
@@ -46,9 +46,8 @@ def manually_fill():
         timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
         Time = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
         Hour, Minute, Second = timeStamp.split(":")
-        ####Creatting csv of attendance
 
-        ##Create table for Attendance
+        ##Attendance table
         date_for_DB = datetime.datetime.fromtimestamp(ts).strftime('%Y_%m_%d')
         global subb
         subb=SUB_ENTRY.get()
@@ -56,7 +55,7 @@ def manually_fill():
 
         import pymysql.connections
 
-        ###Connect to the database
+        ###Connection with the database
         try:
             global cursor
             connection = pymysql.connect(host='localhost', user='root', password='', db='test')
@@ -76,9 +75,9 @@ def manually_fill():
 
 
         try:
-            cursor.execute(sql)  ##for create a table
+            cursor.execute(sql)  
         except Exception as ex:
-            print(ex)  #
+            print(ex)  
 
         if subb=='':
             err_screen_for_subject()
@@ -106,7 +105,7 @@ def manually_fill():
                        activebackground="Red", font=('times', 15, ' bold ')).place(x=90, y=50)
 
             def testVal(inStr, acttyp):
-                if acttyp == '1':  # insert
+                if acttyp == '1':
                     if not inStr.isdigit():
                         return False
                 return True
@@ -133,7 +132,7 @@ def manually_fill():
             def remove_student():
                 STUDENT_ENTRY.delete(first=0, last=22)
 
-            ####get important variable
+            ####variables to be input
             def enter_data_DB():
                 Employee_num = ENR_ENTRY.get()
                 STUDENT = STUDENT_ENTRY.get()
@@ -176,7 +175,6 @@ def manually_fill():
                     for col in reader:
                         c = 0
                         for row in col:
-                            # i've added some styling
                             label = tkinter.Label(root, width=13, height=1, fg="black", font=('times', 13, ' bold '),
                                                   bg="lawn green", text=row, relief=tkinter.RIDGE)
                             label.grid(row=r, column=c)
@@ -203,7 +201,7 @@ def manually_fill():
                                  activebackground="Red", font=('times', 15, ' bold '))
             DATA_SUB.place(x=170, y=300)
 
-            MAKE_CSV = tk.Button(MFW, text="Convert to CSV",command=create_csv, fg="black", bg="red", width=20,
+            MAKE_CSV = tk.Button(MFW, text="Make a CSV file",command=create_csv, fg="black", bg="red", width=20,
                                  height=2,
                                  activebackground="Red", font=('times', 15, ' bold '))
             MAKE_CSV.place(x=570, y=300)
@@ -247,7 +245,7 @@ def err_screen():
     sc1.iconbitmap(r'C:/FR_Nimoy/AMS.ico')
     sc1.title('Warning!!')
     sc1.configure(background='snow')
-    Label(sc1,text='Employee name & Name required!!!',fg='red',bg='white',font=('times', 16, ' bold ')).pack()
+    Label(sc1,text='Please enter Employee name & number',fg='red',bg='white',font=('times', 16, ' bold ')).pack()
     Button(sc1,text='OK',command=del_sc1,fg="black"  ,bg="lawn green"  ,width=9  ,height=1, activebackground = "Red" ,font=('times', 15, ' bold ')).place(x=90,y= 50)
 
 ##Error screen2
@@ -286,16 +284,16 @@ def take_img():
 
                 for (x, y, w, h) in faces:
                     cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                    # incrementing sample number
+                    # incrementing the number
                     sampleNum = sampleNum + 1
-                    # saving the captured face in the dataset folder
+                    # saving the captured data in folder
                     cv2.imwrite("TrainingImage/ " + Name + "." + Employee_num + '.' + str(sampleNum) + ".jpg",
                                 gray[y:y + h, x:x + w])
                     cv2.imshow('Frame', img)
-                # wait for 100 miliseconds
+                # waitkey for 100 miliseconds
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
-                # break if the sample number is morethan 100
+                # break if the number is more than 100
                 elif sampleNum > 200:
                     break
             cam.release()
@@ -317,7 +315,7 @@ def take_img():
             Notification.place(x=450, y=400)
 
 
-###for choose subject and fill attendance
+###Filling attendance with department
 def subjectchoose():
     def Fillattendances():
         sub=tx.get()
@@ -331,7 +329,7 @@ def subjectchoose():
                 try:
                     recognizer.read("C:/FR_Nimoy/Trainer/trainer.yml")
                 except:
-                    e = 'Model not found,Please train model'
+                    e = 'could\'nt found the Model,Please train model'
                     Notifica.configure(text=e, bg="red", fg="black", width=33, font=('times', 15, 'bold'))
                     Notifica.place(x=20, y=250)
 
@@ -396,7 +394,7 @@ def subjectchoose():
                 DB_Table_name = str( Subject + "_" + date_for_DB + "_Time_" + Hour + "_" + Minute + "_" + Second)
                 import pymysql.connections
 
-                ###Connect to the database
+                ###Connection with database
                 try:
                     global cursor
                     connection = pymysql.connect(host='localhost', user='root', password='', db='test')
@@ -413,14 +411,14 @@ def subjectchoose():
                      PRIMARY KEY (ID)
                      );
                 """
-                ####Now enter attendance in Database
+                ####Attendance storing in Database
                 insert_data =  "INSERT INTO " + DB_Table_name + " (ID,Employee_num,NAME,DATE,TIME) VALUES (0, %s, %s, %s,%s)"
                 VALUES = (str(Id), str(aa), str(date), str(timeStamp))
                 try:
-                    cursor.execute(sql)  ##for create a table
-                    cursor.execute(insert_data, VALUES)##For insert data into table
+                    cursor.execute(sql)  ##for creating the table
+                    cursor.execute(insert_data, VALUES)##For inserting data into the table
                 except Exception as ex:
-                    print(ex)  #
+                    print(ex)  
 
                 M = 'Attendance filled Successfully'
                 Notifica.configure(text=M, bg="Green", fg="white", width=33, font=('times', 15, 'bold'))
@@ -442,7 +440,7 @@ def subjectchoose():
                     for col in reader:
                         c = 0
                         for row in col:
-                            # i've added some styling
+                         
                             label = tkinter.Label(root, width=8, height=1, fg="black", font=('times', 15, ' bold '),
                                                   bg="lawn green", text=row, relief=tkinter.RIDGE)
                             label.grid(row=r, column=c)
@@ -451,7 +449,7 @@ def subjectchoose():
                 root.mainloop()
                 print(attendance)
 
-    ###windo is frame for subject chooser
+    ###window for subject
     windo = tk.Tk()
     windo.iconbitmap(r'C:/FR_Nimoy/AMS.ico')
     windo.title("Enter Department name...")
@@ -508,7 +506,7 @@ def admin_panel():
                     for col in reader:
                         c = 0
                         for row in col:
-                            # i've added some styling
+                            
                             label = tkinter.Label(root, width=8, height=1, fg="black", font=('times', 15, ' bold '),
                                                   bg="lawn green", text=row, relief=tkinter.RIDGE)
                             label.grid(row=r, column=c)
@@ -528,7 +526,7 @@ def admin_panel():
 
     Nt = tk.Label(win, text="Attendance filled Successfully", bg="Green", fg="white", width=40,
                   height=2, font=('times', 19, 'bold'))
-    # Nt.place(x=120, y=350)
+    
 
     un = tk.Label(win, text="Enter username", width=15, height=2, fg="white", bg="blue2",
                    font=('times', 15, ' bold '))
@@ -586,13 +584,13 @@ def trainimg():
         Notification.configure(text=q, bg="SpringGreen3", width=50, font=('times', 18, 'bold'))
         Notification.place(x=350, y=400)
 
-    res = "Model Trained"  # +",".join(str(f) for f in Id)
+    res = "Model Trained"
     Notification.configure(text=res, bg="SpringGreen3", width=50, font=('times', 18, 'bold'))
     Notification.place(x=250, y=400)
 
 def getImagesAndLabels(path):
     imagePaths = [os.path.join(path, f) for f in os.listdir(path)]
-    # create empth face list
+    # create the face list in dimenions
     faceSamples = []
     # create empty ID list
     Ids = []
@@ -600,7 +598,7 @@ def getImagesAndLabels(path):
     for imagePath in imagePaths:
         # loading the image and converting it to gray scale
         pilImage = Image.open(imagePath).convert('L')
-        # Now we are converting the PIL image into numpy array
+        #Converting the PIL image into numpy array
         imageNp = np.array(pilImage, 'uint8')
         # getting the Id from the image
 
